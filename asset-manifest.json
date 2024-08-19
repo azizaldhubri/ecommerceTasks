@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.824d1b3a.css",
+    "main.js": "/static/js/main.c5368ae8.js",
+    "static/media/form.jpg": "/static/media/form.013807ae96d8efd2e670.jpg",
+    "static/media/rar.jpg": "/static/media/rar.2236f6ea8ae1d5218b88.jpg",
+    "static/media/excel.jpg": "/static/media/excel.359e0e341d011fca9467.jpg",
+    "static/media/logo.png": "/static/media/logo.f8969f86b3a50f75b3c2.png",
+    "index.html": "/index.html",
+    "main.824d1b3a.css.map": "/static/css/main.824d1b3a.css.map",
+    "main.c5368ae8.js.map": "/static/js/main.c5368ae8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.824d1b3a.css",
+    "static/js/main.c5368ae8.js"
+  ]
+}
