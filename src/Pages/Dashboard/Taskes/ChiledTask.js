@@ -340,7 +340,7 @@ export default function ChiledTask(){
                       )}
                       <p className="m-0  p-0 d-flex   ">{it.fileName.length>12?StringSlice(it.fileName,12):it.fileName}</p>                                       
                           <p className="m-0">{it.fileSize}</p>
-                      <a  href={`http://127.0.0.1:8000/api/download/${it.file}`} >Download</a>  
+                      <a  href={`https://free-001.yemenhosting.com/api/download/${it.file}`} >Download</a>  
              
                       </div>                      
 
