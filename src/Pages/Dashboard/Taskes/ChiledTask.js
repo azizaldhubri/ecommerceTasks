@@ -328,7 +328,8 @@ export default function ChiledTask(){
                   <div key={nm} className="border rounded  position-relative " style={{width:'100px'}}>
                   <div className="d-flex flex-column align-items-center  justify-content-center  gap-1">
                       {it.fileType=='image'?  <img 
-                      src={(`https://free-001.yemenhosting.com/assets/${it.file}`)} width='50px'height='80px' alt=" img product"></img>
+                      // src={(`https://free-001.yemenhosting.com/assets/${it.file}`)} width='50px'height='80px' alt=" img product"></img>
+                      src={(`/assets/${it.file}`)} width='50px'height='80px' alt=" img product"></img>
                       :(it.fileType =='doc'? <img src={require('../../../Assets/files/doc.png')} width='50px' height='60px' alt=" img product"></img>
                       :(it.fileType =='excel'?
                         <img src={require('../../../Assets/files/excel.jpg')} width='50px'height='60px' alt=" img product"></img>
