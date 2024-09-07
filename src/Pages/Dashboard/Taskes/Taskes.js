@@ -12,9 +12,8 @@ export default function Temptask1(){
         const[refresh,setrefresh]=useState(0)   
         const[userId,setUserId]=useState('');     
         const[tasks,setTasks]=useState([]);       
-        const[incomingTasks,setIncomingTasks]=useState(true)
-        const[chiled_task,setchiled_task]=useState([]);
-        const[loading,setLoading]=useState(true);
+        const[incomingTasks,setIncomingTasks]=useState(false)       
+        const[loading,setLoading]=useState(false);
         let iswrritten=true ;
         let countCommit=0 ;
    
@@ -23,18 +22,12 @@ export default function Temptask1(){
             .then(res=>{
                 setUserId(res.data.id);  })
         },[])
-        useEffect(()=>{
-            Axios.get('chiled_task')
-            .then((e)=>{setchiled_task(e.data);
-              setLoading(false);                
-            })
-         },[refresh])
         
-           
+        
         useEffect(()=>{
             async function gettask(){
             try{  await  Axios.get('tasks')
-                .then(e=>{setTasks(e.data.post);
+                .then(e=>{setTasks(e.data.post);               
                setLoading(false);
                   })                             
             }
@@ -44,88 +37,97 @@ export default function Temptask1(){
 
         },[])
 
+      const taskshow=tasks.map((task,index)=>(
+        <div className="   w-100   " key={index}
+         style={{color:task.task_status=='Completed' ?'black':'red',boxShadow:'0 5px 5px rgba(0,0,0,0.3)'}}>           
+                <>
+         {countCommit===0}
+       {iswrritten=true}
+        {(userId==(incomingTasks?task.id_receiver:task.sender_id)) &&                            
+    <Link to={`${task.id}`}     
+    className="p-2 d-flex gap-2  w-100 align-items-center mb-2
+     justify-content-between border rounded  flex-wrap "
+     style={{color:task.task_status=='Completed' ?'black':'red',boxShadow:'0 2px 3px rgba(0,0,0,0.3)'}}>       
+         <div className=" d-flex align-items-center justify-content-start  gap-2 flex-wrap">
+           <div className=" d-flex align-items-center justify-content-between flex-wrap gap-3  ">
+              <h5 className="m-0">{task.id}</h5>
+              <h5 className="m-0">{task.sender_name}</h5>
+              <h6 className="m-0  "style={{fontSize:'12px',color:'black'}}>
+                 {task.task_status}</h6>       
+           </div>
+            <div  
+            className="ms-3"           
+                style={{color:task.task_status=='Completed' ?'black':'red'}}>
+                <div className="d-flex align-items-center gap-2">
+                <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
+                    <p className="m-0">{task.description}</p>
+                </div>
+            </div>
+        </div> 
+        {iswrritten=false}
+        <h6 className="m-0  ">{TransformTime(task.created_at)}</h6>
+    </Link>
+    }
+    {incomingTasks &&    
+    task.chiledtask.map((item ,nm)=>(
+    
+        (item.task_id==task.id && item.id_receiver==userId && task.sender_id !=userId && iswrritten)&&
+          
+        <Link to={`${task.id}`} key={nm}    
+    className="p-2 d-flex gap-2  w-100 align-items-center mb-2
+     justify-content-between border rounded  flex-wrap "
+     style={{color:task.task_status=='Completed' ?'black':'red',boxShadow:'0 2px 3px rgba(0,0,0,0.3)'}}>       
+         <div className=" d-flex align-items-center justify-content-start  gap-2 flex-wrap">
+           <div className=" d-flex align-items-center justify-content-between flex-wrap gap-3  ">
+              <h5 className="m-0">{task.id}</h5>
+              <h5 className="m-0">{task.sender_name}</h5>
+              <h6 className="m-0  "style={{fontSize:'12px',color:'black'}}>
+                 {task.task_status}</h6>       
+           </div>
+            <div  
+            className="ms-3"           
+                style={{color:task.task_status=='Completed' ?'black':'red'}}>
+                <div className="d-flex align-items-center gap-2">
+                <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
+                    <p className="m-0">{task.description}</p>
+                </div>
+            </div>
+        </div> 
+        {iswrritten=false}
+        <h6 className="m-0  ">{TransformTime(task.created_at)}</h6>
+    </Link>
+    ))                     
+                                        
+          } 
+     
+    </>
+        </div>
+    
+    )
+)                      
+    
+        
+           
+        
+
           
         return(
             <>
            
            {loading && <LoadingSubmit/>} 
-                <div className=" w-100 px-3 py-3 ">
-                    <div className=" w-100  d-flex align-items-center justify-content-between  ">
-                                  
-                        <div  className="d-flex   justify-content-center justify-content-between mt-1 gap-3  w-100 ">
-                        <button className="btn btn-primary mb-3 w-25" disabled={!incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task sending</button>
-                        <button className="btn btn-primary mb-3 w-25"disabled={incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task incoming</button>
-                        <Link className="btn btn-primary mb-3" to='/dashboard/addTask'>New task</Link>
-                        </div> 
-                    </div>    
-                <div  className="d-flex  flex-column  mt-2 "  >           
-                       
-                        <div className="mt-3">
-                            {tasks.map((task,index)=>(
-                                <div key={index}>
-                                   {/* {(incomingTasks && task.receiver_id==userId) &&  */}
-                                        <>
-                                 {countCommit===0}
-                               {iswrritten=true}
-                                {(userId==(incomingTasks?task.receiver_id:task.user_id)) &&                            
-                            <div className="p-2 d-flex gap-5 text-danger 
-                             align-items-center border rounded  mt-2 "style={{boxShadow:'0 5px 5px rgba(0,0,0,0.3)'}}>
-                                
-                                <h5 className="m-0">{task.id}</h5>
-                                <h5 className="m-0">{task.sender_name}</h5>
-                               
-                                
-                                {/* <p className="m-0">{task.title} </p> */}
-                                <Link to={`${task.id}`}
-                                className="text-danger   w-100  d-flex  align-items-center justify-content-between m-0 ">
-                                    <div className="d-flex align-items-center gap-2">
-                                <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
-                                <p className="m-0">{task.title}</p>
-                                    </div>
-                                <h6 className="m-0  ">{TransformTime(task.created_at)}</h6>
-
-                                </Link>
-                                {iswrritten=false}
-                            </div>}
-                             {incomingTasks &&
-                            
-                              chiled_task.map((item ,nm)=>(
-                            
-                                (item.task_id==task.id && item.receiver_id==userId && iswrritten)&&
-                                <div key={nm} className="p-2 d-flex gap-5 text-danger
-                                 align-items-center border rounded  mt-2 "style={{boxShadow:'0 5px  5px rgba(0,0,0,0.3)'}}>
-                                    
-                                    <h5 className="m-0">{task.id}</h5>
-                                    <h5 className="m-0">{item.sender_name}</h5>
-                                    
-                                    
-                                    <Link to={`${task.id}`}className="text-danger d-flex w-100  m-0 gap-3
-                                    align-items-center justify-content-between ">
-                                    <div className="d-flex align-items-center gap-2">
-                                    <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
-                                    <p className="m-0">{task.title} </p>                                    
-                                    </div>
-                                    <h6 className="m-0  ">{TransformTime(task.created_at)}</h6>
-                                    </Link>
-                                    
-                                    {iswrritten=false}
-                                </div>
-                                  ))                                 
-                                                                   
-                                  }
-                             
-                            </>
-                                </div>
-                            
-                            )
-            )                      
-                            }
-
-                        </div>
-                        
-                         
-                    </div> 
-                </div>
+    <div className=" w-100 px-3 py-3 ">                                  
+        <div  className="d-flex   justify-content-center justify-content-between mt-1 w-100 flex-wrap ">
+            <button className="btn" disabled={!incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task sending</button>
+            <button className="btn"disabled={incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task incoming</button>
+            <Link className="btn " to='/dashboard/addTask'>New task</Link>                
+        </div>         
+                
+        <div className="mt-3 "> 
+            {taskshow}           
+        </div>               
+                    
+        
+    </div>
             </>
             )
     }
