@@ -40,9 +40,9 @@ export default function TopBar(){
     return (
        
         <div className="top-bar ">
-           <div className="d-flex align-items-center justify-content-between h-100"> 
-           <div className="d-flex align-items-center gap-5 ">
-               <h2>E-Commerce</h2>
+           <div className="d-flex align-items-center justify-content-between h-100 flex-wrap"> 
+           <div className="d-flex align-items-center gap-4 ">
+               <h5>E-Commerce</h5>
                 <FontAwesomeIcon
                 onClick={()=>setisOpen(prev =>!prev)} 
                 cursor={'pointer'}
