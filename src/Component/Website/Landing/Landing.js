@@ -1,31 +1,12 @@
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import '../../../Pages/Websit/HomePage/Home.css'
-import { Axios } from "../../../Api/axios";
-import { LOGOUT } from "../../../Api/Api";
-
-import Cookie from 'cookie-universal' ;
 
 
+export default function Landing(){    
 
-export default function Landing(){
-      const cookie=Cookie();
-    async function handleLogout(){
-    try{
-       await Axios.get(`/${LOGOUT}`);         
-     window.location.pathname='/login'
-     cookie.remove('e-commerce');
-    }
-    catch(err){
-        console.log(err)
-    }
-
-    }
-    return(
-            
-       
-       
-        <div className="d-flex align-items-center flex-wrap home position-relative">
+    return(         
+          <div className="d-flex align-items-center flex-wrap home position-relative">
        
           <Container  >
             
@@ -41,9 +22,8 @@ export default function Landing(){
                 
             </div>
           </Container> 
-          <div className="position-absolute top-0 start-0    mt-2 ms-2 d-flex flex-column">          
-       
-                <button className=" btn btn-primary mt-2 " onClick={handleLogout}>Logout</button>
+          <div className="position-absolute top-0 start-0    mt-2 ms-2 d-flex flex-column">        
+               
          
           </div>
        
