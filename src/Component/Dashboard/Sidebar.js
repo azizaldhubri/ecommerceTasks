@@ -38,14 +38,14 @@ export default function SideBar(){
                   width:'100%',
                   height:'100vh',
                   backgroundColor:'rgba(0 ,0 ,0 ,0.2)',
-                  display:windowSize< '768' && isOpen ? 'block':'none'
+                  display:windowSize< '768' && !isOpen ? 'block':'none'
                   }}>
                 
             </div>
             <div className='side-bar pt-3' 
             style={{
                 
-                left:windowSize < '768' ?( isOpen ? 0 : '-100%'): 0 ,
+                left:windowSize < '768' ?( !isOpen ? 0 : '-100%'): 0 ,
                 width: isOpen ? '240px':'fit-content',
                 position:windowSize < '768' ?'fixed': 'sticky' 
             }}>
