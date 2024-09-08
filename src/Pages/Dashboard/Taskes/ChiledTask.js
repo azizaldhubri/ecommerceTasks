@@ -477,14 +477,17 @@ const handleOptionChange =async (e) => {
                     ))
                     }
                 </div> 
-                <div className="w-100 d-flex justify-content-center gap-3 mt-2 ">       
+              <div className="w-100 d-flex justify-content-center gap-3 mt-2 ">       
                   <button  className="border-0 bg-white fs-4  " 
                   disabled ={title ? false:true }
                   style={{color:title ? '#E41B17':'	#FBBBB9' }}
                   onClick={handlesubmit}>Save</button>      
-                  <button className="border-0 bg-white fs-4 text-danger"
+                  <button className="border-0 bg-white fs-4 "
+                   disabled ={title ? false:true }
+                   style={{color:title ? '#E41B17':'	#FBBBB9' }}
                   onClick={()=>{setIsopen(false);setTitle('')}}>Cancle</button>                     
                 </div> 
+         
         
                         
     </div>
