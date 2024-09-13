@@ -125,8 +125,8 @@ export default function ChiledTask(){
             setIsopen(false);
             setFilesdata('') ; 
             if(task_status==='To Do') 
-             { setTask_status('In_Progress')    ;
-               Axios.put(`tasks/status_update/${id}`,{ status: 'In_Progress' }) ;   
+             { setTask_status('In_progress')    ;
+               Axios.put(`tasks/status_update/${id}`,{ status: 'In_progress' }) ;   
               }
           }
           catch (error) {
@@ -213,9 +213,9 @@ const handleOptionChange =async (e) => {
                       />
                       <Form.Check style={{cursor:"pointer"}}
                       type="radio"
-                      label="In_Progress"
-                      value="In_Progress"
-                        checked={task_status === 'In_Progress'}                       
+                      label="In_progress"
+                      value="In_progress"
+                        checked={task_status === 'In_progress'}                       
                       onChange={handleOptionChange}
                       />
                       <Form.Check style={{cursor:"pointer"}}
