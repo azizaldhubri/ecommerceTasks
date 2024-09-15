@@ -335,11 +335,11 @@ const handleOptionChange =async (e) => {
                           {item.split('.').pop()==='jpg' ||(item.split('.').pop())==='png'
                           ||(item.split('.').pop())==='jfif' ||(item.split('.').pop())==='JPG'?
                                 <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                                  <img key={i} src={`http://127.0.0.1:8000/storage/${item}`} width='60px'height='60px' alt="img"></img>                   
+                                  <img key={i} src={`https://free-001.yemenhosting.com/api/storage/${item}`} width='60px'height='60px' alt="img"></img>                   
                                 {/* <p className="m-0 fs-6">{FileName(item)} {nameFile2[i]}</p> */}
                                 <p className="m-0 fs-6">{File_Name(item,i)} </p>
-                                    {/* <a  href={`http://127.0.0.1:8000/storage/${file}`} >Download</a>  */}
-                                    <a className="fs-6"  href={`http://127.0.0.1:8000/api/download/${File_Path(item,i)}`} >Download</a>
+                                    {/* <a  href={`https://free-001.yemenhosting.com/api/storage/${file}`} >Download</a>  */}
+                                    <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >Download</a>
                               </div>
                                 
                                 :(item.split('.').pop())==='docx'?(
