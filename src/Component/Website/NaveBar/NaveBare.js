@@ -4,15 +4,32 @@ import { Link } from 'react-router-dom';
 import './nave.css'
 import { Axios } from "../../../Api/axios.js"
 import { useEffect, useState } from "react"
- import {CAT} from './../../../Api/Api.js'
+ import {CAT, LOGOUT} from './../../../Api/Api.js'
 import StringSlice from "../../../Helpers/StringSlice.js";
 import ShowSkeleton from "../Skeleton/Skeleton.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Cookie from 'cookie-universal' ;
 
 
 
 export default function NaveBare(){
+
+          const cookie=Cookie();
+         
+        async function handleLogout(){
+        try{
+        //    await Axios.get(`/${LOGOUT}`);         
+        cookie.remove('e-commerce');
+         window.location.pathname='/login'
+        }
+        catch(err){
+            console.log(err)
+        }
+    
+        }
+
+
     const[categories,setCategories]=useState([]);
     const[loading,setLoading]=useState(true);
     useEffect(()=>{
@@ -49,20 +66,13 @@ export default function NaveBare(){
                 <div className='col-3 d-flex align-items-center justify-content-end gap-4 order-md-3 order-1'>
                     <Link>
                     <img width='60px' src={require('../../../Assets/images/cart.png')}alt=""></img>
-                    </Link>
-                    {/* <Link className="bg-primary text-danger" to='/login'>
-                    <img width='40px' src={require('../../../Assets/images/profile.jpg')}
-                     alt=""
-                    //  style={{filter:'grayscale(1)'}}>
-                      style={{filter: 'hue-rotate(180deg)'}}>
+                    </Link>                                                 
                         
-                    </img>
-                  </Link> */}
-                  
-                    
-                        <Link to='/login'>
-                        <FontAwesomeIcon className="w-100 fs-3 text-primary " icon={faUser}/>
-                        </Link>
+                    <FontAwesomeIcon 
+                        className=" fs-3 text-primary  " icon={faUser}
+                        onClick={handleLogout}
+                        style={{cursor:"pointer"}}/>
+                        
                     
                 </div>
 
