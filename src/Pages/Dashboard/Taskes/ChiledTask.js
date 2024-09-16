@@ -268,7 +268,7 @@ const handleOptionChange =async (e) => {
             {(file.split('.').pop())==='jpg' ||(file.split('.').pop())==='png' 
             ||(file.split('.').pop())==='jfif'||(file.split('.').pop())==='JPG'?
                     <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                      <img key={index} src={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/${File_Path(file,index)}`} width='60px'height='60px' alt="img"></img>                   
+                      <img key={index} src={`https://free-001.yemenhosting.com/api/backend/storage/app/public/assets/${File}`} width='60px'height='60px' alt="img"></img>                   
                       <p className="m-0">{File_Name(file,index)}</p>
                       {/* <a  href={`https://free-001.yemenhosting.com/api/storage/${file}`} >Download</a>  */}
                       <a className="fs-6"  href={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/download/${File_Path(file,index)}`} >Download</a>
