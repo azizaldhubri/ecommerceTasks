@@ -336,7 +336,7 @@ const handleOptionChange =async (e) => {
                                 
                                <img key={index} src={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/${File_Path(item,i)}`} width='60px'height='60px' alt="img"></img>  
                                 {/* <p className="m-0 fs-6">{FileName(item)} {nameFile2[i]}</p> */}
-                                <p className="m-0 fs-6">{File_Name(item,i)} </p>
+                                <p className="m-0 "style={{fontSize:'12px'}}>{File_Name(item,i)} </p>
                                 <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
                                     <h6  style={{fontSize:'10px'}}>Download</h6></a> 
                      
@@ -345,7 +345,7 @@ const handleOptionChange =async (e) => {
                                 :(item.split('.').pop())==='docx'?(
                                   <div className=" d-flex gap-2 align-items-center justify-content-center flex-column " > 
                                     <img src={require('../../../Assets/files/doc.png')} width='60px' height='60px' alt="docs"></img>
-                                    <p className="m-0">{File_Name(item,i)}</p>
+                                    <p className="m-0" style={{fontSize:'12px'}}>{File_Name(item,i)}</p>
                                    <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
                                     <h6  style={{fontSize:'10px'}}>Download</h6></a> 
                                   </div> )
@@ -368,7 +368,7 @@ const handleOptionChange =async (e) => {
                                 :(item.split('.').pop())==='zip'?
                                 <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
                                   <img src={require('../../../Assets/files/rar.jpg')} width='80px' height='60px' alt="docs"></img>
-                                  <p className="m-0"style={{fontSize:'12px'}}>{File_Name(item,i)}</p>
+                                  <p className="m-0"style={{fontSize:'12px'}} style={{fontSize:'12px'}}>{File_Name(item,i)}</p>
                                     <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
                                     <h6  style={{fontSize:'10px'}}>Download</h6></a> 
                                 </div>                     
