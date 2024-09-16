@@ -278,14 +278,14 @@ const handleOptionChange =async (e) => {
                     <div className=" d-flex gap-2 align-items-center justify-content-center flex-column " > 
                         <img src={require('../../../Assets/files/doc.png')} width='60px' height='60px' alt="docs"></img>
                         <p className="m-0">{File_Name(file,index)}</p>
-                        <a  href={`https://free-001.yemenhosting.com/storage/${file}`} >Download</a>  
+                        <a  <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
                     </div> )
                   
                   :(file.split('.').pop())==='pdf'?
                   <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
                     <img src={require('../../../Assets/files/pdf.png')} width='50px' height='60px' alt="docs"></img>
                     <p className="m-0">{File_Name(file,index)}</p>
-                        <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a> 
+                        <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
                   </div>
                   :(file.split('.').pop())==='xlsx'?
                   <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" > 
@@ -293,15 +293,16 @@ const handleOptionChange =async (e) => {
                     <img src={require('../../../Assets/files/excel.jpg')} width='35px' height='35px' alt="docs"></img>
                     
                     <h6  className="m-0 " style={{fontSize:'14px'}}>{File_Name(file,index)}</h6>
-                        <a    href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >
-                        <h6 className="m-0" style={{fontSize:'12px'}}>Download</h6></a> 
+                        // <a    href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >
+                         <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
                   </div>
                   :(file.split('.').pop())==='zip'?
                   <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
                     <img src={require('../../../Assets/files/rar.jpg')} width='80px' height='60px' alt="docs"></img>
                     <p className="m-0"style={{fontSize:'12px'}}>{File_Name(file,index)}</p>
-                        <a  href={`http://127.0.0.1:8000/api/download/${File_Path(file,index)}`} >
-                        <h6 className=""        style={{fontSize:'10px'}}>Download</h6></a> 
+                        // <a  href={`http://127.0.0.1:8000/api/download/${File_Path(file,index)}`} >
+                        // <h6 className=""        style={{fontSize:'10px'}}>Download</h6></a> 
+                     <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
                   </div>
                   
                 :(file.split('.').pop())}
