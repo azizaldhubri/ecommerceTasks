@@ -339,8 +339,7 @@ const handleOptionChange =async (e) => {
                                <img key={index} src={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/${File_Path(item,i)}`} width='60px'height='60px' alt="img"></img>  
                                 {/* <p className="m-0 fs-6">{FileName(item)} {nameFile2[i]}</p> */}
                                 <p className="m-0 fs-6">{File_Name(item,i)} </p>
-                                    {/* <a  href={`https://free-001.yemenhosting.com/storage/${file}`} >Download</a>  */}
-                                    <a className="fs-6"  href={`https://free-001.yemenhostingdddddd.com/download/${File_Path(item,i)}`} >Download</a>
+                                <a className="fs-6"  href={`https://free-001.yemenhostingdddddd.com/download/${File_Path(item,i)}`} >Download</a>
                               </div>
                                 
                                 :(item.split('.').pop())==='docx'?(
