@@ -300,8 +300,7 @@ const handleOptionChange =async (e) => {
                   <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
                     <img src={require('../../../Assets/files/rar.jpg')} width='80px' height='60px' alt="docs"></img>
                     <p className="m-0"style={{fontSize:'12px'}}>{File_Name(file,index)}</p>
-                       \
-                     <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
+                   <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>
                   </div>
                   
                 :(file.split('.').pop())}
