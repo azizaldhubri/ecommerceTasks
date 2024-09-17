@@ -324,10 +324,10 @@ const handleOptionChange =async (e) => {
           </div>
             <div >
                   {tasks.comments && tasks.comments.map((it,index)=>
-              <div key={index} className="border-bottom  mb-2">
+              <div key={index} className="border-top  mt-1 mb-2">
                   <div className="d-flex justify-content-between align-items-center  ">
                 
-          <div className="d-flex justify-content-center align-items-center border-top  mt-2 ">
+          <div className="d-flex justify-content-center align-items-center  ">
               <p className=" m-0    border rounded-circle d-flex justify-content-center align-items-center"                 
               style={{width:'30px',height:'30px',background:'#98AFC7'}}>{getFirstLetter(it.name_sender) } </p>
           
