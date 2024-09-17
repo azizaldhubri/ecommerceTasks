@@ -95,8 +95,9 @@ function handlechangefile(e){
      
         // console.log(...formData)
         try{        
-           await Axios.post('tasks/add',formData )            
-           navigate('/dashboard/taskes');        
+           await Axios.post('tasks/add',formData )
+             window.location.pathname='/dashboard/taskes' 
+           // navigate('/dashboard/taskes');        
           }
           catch (error) {
             console.error('Error sending data:', error);
