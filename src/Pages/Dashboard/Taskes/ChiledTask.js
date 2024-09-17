@@ -324,7 +324,7 @@ const handleOptionChange =async (e) => {
           </div>
             <div >
                   {tasks.comments && tasks.comments.map((it,index)=>
-              <div key={index} className="border-top  mt-1 mb-2">
+              <div key={index} className="border-top pt-2 mt-1 mb-2">
                   <div className="d-flex justify-content-between align-items-center  ">
                 
           <div className="d-flex justify-content-center align-items-center  ">
