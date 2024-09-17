@@ -326,8 +326,8 @@ const handleOptionChange =async (e) => {
                   {tasks.comments && tasks.comments.map((it,index)=>
               <div key={index} className="border-bottom  mb-2">
                   <div className="d-flex justify-content-between align-items-center  ">
-          
-          <div className="d-flex justify-content-center align-items-center ">
+                
+          <div className="d-flex justify-content-center align-items-center border-top  mt-2 ">
               <p className=" m-0    border rounded-circle d-flex justify-content-center align-items-center"                 
               style={{width:'30px',height:'30px',background:'#98AFC7'}}>{getFirstLetter(it.name_sender) } </p>
           
