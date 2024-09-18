@@ -3,7 +3,8 @@ import { Form } from "react-bootstrap"
 import { Axios } from "../../../Api/axios"
 import {  USER, USERS } from "../../../Api/Api"
 import TranFormDate from "../../../Helpers/TranFormDate";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";  
+import LoadingSubmit from "../../../Component/Loading/Loading";
 
 export default function AddTaskes(){
     const navigate=useNavigate();   
@@ -13,6 +14,7 @@ export default function AddTaskes(){
     const[users,setUsers]=useState([]);
     const[filesdata,setFilesdata]=useState([]);
     const [message, setMessage] = useState("");
+    const[Loading,setLoading]=useState(false);
 
   // تحديث الرسالة عند الضغط على الزر
   const handleClick = () => {
@@ -98,12 +100,14 @@ function handlechangefile(e){
         for (let i = 0; i < filesdata.length; i++) {
             formData.append('files[]', filesdata[i]);
         }     
-        try{                  
+        try{   
+            setLoading(true) ;
            await Axios.post('tasks/add',formData )             
            navigate('/dashboard/taskes');        
           }
           catch (error) {
             console.error('Error sending data:', error);
+              setLoading(false) 
           }
            
     }
@@ -134,6 +138,7 @@ function handlechangefile(e){
                 </h5>
             
             <div className=" w-100  d-flex align-items-center justify-content-start mt-2">
+               {Loading  && < LoadingSubmit/>}
                 <Form onSubmit={handlesubmit}
                 className=" d-flex ms-2 w-100 flex-column"
                 encType="multipart/form-data">
