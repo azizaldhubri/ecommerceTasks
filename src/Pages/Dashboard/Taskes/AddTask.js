@@ -9,8 +9,8 @@ import LoadingSubmit from "../../../Component/Loading/Loading";
 export default function AddTaskes(){
     const navigate=useNavigate();   
     
-    const today = new Date().toISOString().split('T')[0];       
-    const todayDate=TranFormDate(new Date());    
+    // const today = new Date().toISOString().split('T')[0];       
+    const today=TranFormDate(new Date());    
     const[users,setUsers]=useState([]);
     const[filesdata,setFilesdata]=useState([]);
     const [message, setMessage] = useState("");
@@ -31,8 +31,8 @@ export default function AddTaskes(){
         sender_id:''  ,
         receiver_name:'',
         task_status:'To Do',
-        start_task:todayDate  ,
-        end_task:todayDate
+        start_task:today  ,
+        end_task:today
         
      }) 
    
