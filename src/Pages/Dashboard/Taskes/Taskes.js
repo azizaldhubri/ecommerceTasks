@@ -83,7 +83,7 @@
                     <div className="d-flex align-items-center gap-2">
                     <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
                         <p className="m-0">{task.description}</p>
-                     <p className="m-0">({ task.chiledtask.length})</p>
+                      { task.chiledtask.length>0 &&   <p className="m-0">({ task.chiledtask.length})</p>}
                     </div>
                 </div>
             </div> 
@@ -113,7 +113,7 @@
                     <div className="d-flex align-items-center gap-2">
                     <FontAwesomeIcon icon={faStar} className="text-dark"></FontAwesomeIcon>
                         <p className="m-0">{task.description}</p>
-                     <p className="m-0">({ task.chiledtask.length})</p>
+                     { task.chiledtask.length>0 &&   <p className="m-0">({ task.chiledtask.length})</p>}
                     </div>
                 </div>
             </div> 
