@@ -92,7 +92,7 @@ function handlechangefile(e){
         formData.append('task_type', form.task_type);
         formData.append('description',form.description);
         formData.append('start_task', form.start_task);
-        formData.append('end_task', form.end_task);    
+        formData.append('end_task', form.start_task>form.end_task ?form.start_task:form.end_task );    
        
         // إضافة الملفات إلى formData
         for (let i = 0; i < filesdata.length; i++) {
