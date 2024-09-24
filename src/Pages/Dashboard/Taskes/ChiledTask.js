@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Form } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams ,useNavigate} from "react-router-dom";
 import { Axios } from "../../../Api/axios";
 import { USER, USERS } from "../../../Api/Api";
 import TransformTime from "../../../Helpers/TransformTime";
@@ -8,34 +8,29 @@ import TranFormDate from "../../../Helpers/TranFormDate";
 import File_Name from "../../../Helpers/File_Name";
 import File_Path from "../../../Helpers/File_path";
 import StringSlice from "../../../Helpers/StringSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { typeFile } from "./Files";
 
 export default function ChiledTask(){
+  const navigate=useNavigate();  
     const {id}=useParams();
     const[refresh,setrefresh]=useState(0)
    
     const[title,setTitle]=useState('');
-    // const[name_sender,setName_sender]=useState('');
-    const[username,setUserName]=useState('');
-    const[senderTask,setSenderTask]=useState('');
-
     const[id_senderTask,setId_senderTask]=useState('');
-    const[userId,setUserId]=useState('');    
-
-    
-
     const[id_receiver,setId_receiver]=useState('');
     const[tasks,setTasks]=useState([])
    
     const [isopen, setIsopen] = useState(false)
-    const[task_status,setTask_status]=useState('');
-     const[users,setUsers]=useState([]);
-     const[filesdata,setFilesdata]=useState([]);
-   
-       const[start_task,setStart_task]=useState(TranFormDate(new Date()));
+    const [openeditdescription, setOpeneditdescription] = useState(false)
+    const[users,setUsers]=useState([]);
+    const[filesdata,setFilesdata]=useState([]); 
+
+     const[start_task,setStart_task]=useState(TranFormDate(new Date()));
     const[endtask,setEndtask]=useState(TranFormDate(new Date()));
 
-    const today = new Date().toISOString().split('T')[0];
-
+    
     const startDate = new Date(start_task);
   const endDate = new Date(endtask);
 
@@ -45,6 +40,11 @@ export default function ChiledTask(){
 
       const focus=useRef('');   
     const openImage=useRef(null);   
+    const task_status=useRef('');   
+    const senderTask=useRef('');   
+    const username=useRef('');   
+    const userId=useRef('');   
+    
 
     
     //-----------------------------------
@@ -57,8 +57,10 @@ export default function ChiledTask(){
      useEffect(()=>{
         Axios.get(`${USER}`)
         .then((e)=>{
-          setUserName(e.data.name);
-          setUserId(e.data.id);
+          // setUserName(e.data.name);
+          username.current=e.data.name;
+          userId.current=e.data.id;
+          // setUserId(e.data.id);
           
           
         
@@ -88,11 +90,12 @@ export default function ChiledTask(){
       try{    Axios.get(`tasks/${id}`)
           .then(e=>{
             setTasks(e.data);
+            // console.log(e.data)
             setStart_task(e.data.start_task)
             setEndtask(e.data.end_task);
-            setTask_status(e.data.task_status)
-            setId_senderTask(e.data.sender_id)
-            setSenderTask(e.data.sender_name)          
+            task_status.current=e.data.task_status ;
+            setId_senderTask(e.data.sender_id)            
+            senderTask.current=e.data.sender_name        
         
             })                             
       }
@@ -108,10 +111,10 @@ export default function ChiledTask(){
        
         const formData = new FormData();
         formData.append('task_id', id);
-        formData.append('id_sender', userId);
-        formData.append('name_sender', username);
+        formData.append('id_sender', userId.current);
+        formData.append('name_sender', username.current);
         formData.append('id_receiver', id_receiver ?id_receiver:id_senderTask);
-        formData.append('name_receiver', receiver_name?receiver_name:senderTask);      
+        formData.append('name_receiver', receiver_name?receiver_name:senderTask.current);      
         formData.append('title', title);
      
     
@@ -120,7 +123,7 @@ export default function ChiledTask(){
           formData.append('files[]', filesdata[i]);
         }
      
-        // console.log(...formData)
+        console.log(...formData)
         try{        
             await Axios.post('chiled_task/add',formData )            
             setrefresh(prev=>prev+1);  
@@ -128,8 +131,10 @@ export default function ChiledTask(){
             setId_receiver('')   ;   
             setIsopen(false);
             setFilesdata('') ; 
-            if(task_status==='To Do') 
-             { setTask_status('In_progress')    ;
+            if(task_status.current==='To Do') 
+             {
+              //  setTask_status('In_progress')    ;
+               task_status.current='In_progress'
                Axios.put(`tasks/status_update/${id}`,{ status: 'In_progress' }) ;   
               }
           }
@@ -137,11 +142,13 @@ export default function ChiledTask(){
             console.error('Error sending data:', error);
           }
      
-    }  
+    } 
+
 
         //  function handel change status task
 const handleOptionChange =async (e) => {  
-    setTask_status(e.target.value);
+    // setTask_status(e.target.value);
+    task_status.current=e.target.value
    const status=e.target.value; 
   try{        
      await Axios.put(`tasks/status_update/${id}`,{ status: status }) ;
@@ -153,7 +160,7 @@ const handleOptionChange =async (e) => {
 };
     
     function handlechangefile(e){
-      console.log( e.target.files)
+      // console.log( e.target.files)
       setFilesdata((prev)=>[...prev,...e.target.files]);
     }
     
@@ -169,7 +176,21 @@ const handleOptionChange =async (e) => {
     function handleOpenImage(){
       openImage.current.click()      
     }
- 
+    
+    async function handeleDelete(){
+      try{  
+         
+        await Axios.delete(`tasks/${id}`) ;
+        navigate('/dashboard/taskes');
+
+          //  setrefresh(perv=>perv+1) 
+     }
+     catch (error) {
+       console.error('Error sending data:', error);
+     }
+
+    }
+  
     return(
       <>
       
@@ -188,7 +209,7 @@ const handleOptionChange =async (e) => {
             </div>
             <Link to='/dashboard/taskes' className="ms-100">Back</Link>
         </div>              
-        <div className="border px-3 py-3 rounded">
+        <div className="border px-3 py-3 rounded ">
         {tasks.sender_name &&
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           <div className="d-flex justify-content-center align-items-center ">
@@ -199,9 +220,47 @@ const handleOptionChange =async (e) => {
           </div>
         <p className=" m-0">{TransformTime(tasks.created_at)}</p>
       </div>
-            } 
+            }
+            {tasks.description && 
+             <div className="d-flex justify-content-between align-items-center flex-wrap ">
+             <p className="  m-0 mt-2 ms-3">{tasks.description}</p>
+             <>
+             <FontAwesomeIcon  
+                        className="ms-3 text-danger"
+                           onClick={()=>handeleDelete()}
+                             fontSize={'19px'}                                           
+                             icon={faTrash}
+                             cursor={'pointer'} /> 
+             {/* <FontAwesomeIcon  
+                        className="ms-3 text-primary"
+                          //  onClick={()=>handeleDelete()}
+                             fontSize={'19px'}                                           
+                            
+                             icon={faPenToSquare }
+                             onClick={()=>setOpeneditdescription(true)}
+                             cursor={'pointer'} />  */}
+             </>          
+                   
 
-          <p className="w-100  m-0 mt-2 ms-3">{tasks.description}</p>
+             </div>} 
+             {/* {openeditdescription===true &&            
+              <div className="w-100 ">
+              <textarea  className="w-100 " aria-label="With textarea  "
+                       name="title"
+                        // value={tasks.description}
+                    onChange={(e)=>setTitle(e.target.value)}
+                       placeholder="Description"
+                       
+                       >
+                       </textarea>
+
+              </div>
+               } */}
+           
+             
+
+                 
+
           <div className=" gap-3 ">
         
             <p className="m-0 mt-1  text-danger fs-6">Change Task_status</p>
@@ -212,7 +271,7 @@ const handleOptionChange =async (e) => {
                       type="radio"
                       label="To Do"
                       value="To Do"
-                        checked={task_status === 'To Do'}                       
+                        checked={task_status.current === 'To Do'}                       
                       onChange={handleOptionChange}
                       disabled
                       />
@@ -220,14 +279,14 @@ const handleOptionChange =async (e) => {
                       type="radio"
                       label="In_progress"
                       value="In_progress"
-                        checked={task_status === 'In_progress'}                       
+                        checked={task_status.current === 'In_progress'}                       
                       onChange={handleOptionChange}
                       />
                       <Form.Check style={{cursor:"pointer"}}
                       type="radio"
                       label="Completed"
                       value="Completed"
-                        checked={task_status === 'Completed'}
+                        checked={task_status.current === 'Completed'}
                        
                       onChange={handleOptionChange}
                       />
@@ -235,7 +294,7 @@ const handleOptionChange =async (e) => {
                       type="radio"
                       label="Deferred"
                       value="Deferred"
-                        checked={task_status === 'Deferred'}
+                        checked={task_status.current === 'Deferred'}
                         onChange={handleOptionChange}
                     
                       />
@@ -243,7 +302,7 @@ const handleOptionChange =async (e) => {
                       type="radio"
                       label="Cancelled"
                       value="Cancelled"
-                        checked={task_status === 'Cancelled'}
+                        checked={task_status.current === 'Cancelled'}
                       
                       onChange={handleOptionChange}
                       />
@@ -251,7 +310,7 @@ const handleOptionChange =async (e) => {
                       type="radio"
                       label="In_Review"
                       value="In_Review"
-                        checked={task_status === 'In_Review'}
+                        checked={task_status.current === 'In_Review'}
                       onChange={handleOptionChange}
                     
                       />                       
@@ -267,67 +326,36 @@ const handleOptionChange =async (e) => {
             {tasks.file_paths !='' &&
             <div className="d-flex align-items-center justify-content-start flex-wrap gap-2">
               <p className="m-0   w-100  ">Files</p>
-               {tasks.file_paths && tasks.file_paths.map((file,index)=>
+               {tasks.file_paths && tasks.file_paths.map((file,index)=>      
           
-          
-          <div key={index} className=" "style={{width:'100px'}}> 
-          <div className=" d-flex gap-3   py-1  flex-wrap  ">
-            {(file.split('.').pop())==='jpg' ||(file.split('.').pop())==='png' 
-            ||(file.split('.').pop())==='jfif'||(file.split('.').pop())==='JPG'?
-                    <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-         <img key={index} src={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/${File_Path(file,index)}`} 
-              width='40px'height='40px' alt="img"></img>                   
-                       <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>  
-                      {/* <a  href={`http://127.0.0.1:8000/storage/${file}`} >Download</a>  */}
-                       <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a> 
-                  </div>
-                  
-                  :(file.split('.').pop())==='docx'?(
-                    <div className=" d-flex gap-2 align-items-center justify-content-center flex-column " > 
-                        <img src={require('../../../Assets/files/doc.png')}  width='40px' height='40px' alt="docs"></img>
-                        <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>  
-                       <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a>  
-                    </div> )
-                  
-                  :(file.split('.').pop())==='pdf'?
-                  <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                    <img src={require('../../../Assets/files/pdf.png')} width='40px' height='40px' alt="docs"></img>
-                     <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>  
-                     <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a> 
-                  </div>
-                  :(file.split('.').pop())==='xlsx'?
-                  <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" > 
-                    
-                    <img src={require('../../../Assets/files/excel.jpg')}  width='40px' height='40px' alt="docs"></img>
-                    
-                     <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>  
-                          <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a> 
-                  </div>
-                  :(file.split('.').pop())==='zip'|| file.split('.').pop()==='rar'?
-                  <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                    <img src={require('../../../Assets/files/rar.jpg')}  width='60px' height='40px' alt="docs"></img>
-                    <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>  
-                       
-                   <a className="fs-6"  href={`https://free-001.yemenhosting.com/api/download/${File_Path(file,index)}`} >Download</a> 
-                  </div>
-                  
-                :(file.split('.').pop())}
-            </div>
+          <div key={index} className=" "style={{width:'100px'}}>                     
+              {  typeFile.map((typfile,key)=>
+                  <div key={key}>
+                  {typfile.name.includes(file.split('.').pop())&&(
+                    <div>
+                       <img  src={typfile.type =='img'? ` ${typfile.pathimg}/${file}`:` ${typfile.pathimg}`} 
+                        width='40px' height='40px' alt="img"></img>                   
+                      <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>   
+                      <a className="fs-6"  href={typfile.type =='img'?`${typfile.pathDownload}/${File_Path(file,index)}`
+                      :`${typfile.pathDownload}/${File_Path(file,index)}`} >Download</a>
+
+                    </div>
+                  )}
+                </div>)}         
               </div>
-              ) }
+              )}
             </div>
-            }
-         
+            }   
 
           </div>
 
           </div>
             <div >
                   {tasks.comments && tasks.comments.map((it,index)=>
-              <div key={index} className="border-top pt-2 mt-1 mb-2">
+              <div key={index} className="border-bottom  mb-2">
                   <div className="d-flex justify-content-between align-items-center  ">
-                
-          <div className="d-flex justify-content-center align-items-center  ">
+           
+          <div className="d-flex justify-content-center align-items-center ">
               <p className=" m-0    border rounded-circle d-flex justify-content-center align-items-center"                 
               style={{width:'30px',height:'30px',background:'#98AFC7'}}>{getFirstLetter(it.name_sender) } </p>
           
@@ -339,56 +367,26 @@ const handleOptionChange =async (e) => {
               {  it.file_paths.length>0 &&
               <div className=" d-flex gap-3   py-1 px-1  flex-wrap   ">
                 <p className="m-0 mb-1 w-100 ">Files:</p>
-                  {  it.file_paths && it.file_paths.map((item,i)=>            
-                  <div key={i} className="  "style={{width:'100px'}}> 
+                  {  it.file_paths && it.file_paths.map((item,i)=>                    
                   
-                      {item.split('.').pop()==='jpg' ||(item.split('.').pop())==='png'
-                      ||(item.split('.').pop())==='jfif' ||(item.split('.').pop())==='JPG'?
-                            <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                            <img key={index} src={`https://free-001.yemenhosting.com/backend/storage/app/public/assets/${File_Path(item,i)}`}
-                           width='40px'height='40px' alt="img"></img>                   
-                           
-                           <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>  
-                            
-                                <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
-                                    <h6  style={{fontSize:'10px'}}>Download</h6></a> 
-                          </div>
-                            
-                            :(item.split('.').pop())==='docx'?(
-                              <div className=" d-flex gap-2 align-items-center justify-content-center flex-column " > 
-                                <img src={require('../../../Assets/files/doc.png')} width='40px' height='40px' alt="docs"></img>
-                             <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>  
-                               <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
-                                    <h6  style={{fontSize:'10px'}}>Download</h6></a>  
-                              </div> )
-                          
-                            :(item.split('.').pop())==='pdf'?
-                            <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                              <img src={require('../../../Assets/files/pdf.png')} width='40px' height='40px' alt="docs"></img>
-                             <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>  
-                               <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
-                                    <h6  style={{fontSize:'10px'}}>Download</h6></a> 
-                            </div>
-                            :(item.split('.').pop())==='xlsx'?
-                            <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" > 
-                              <img src={require('../../../Assets/files/excel.jpg')} width='40px' height='40px' alt="docs"></img>
-                             <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>  
-                               <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
-                                    <h6  style={{fontSize:'10px'}}>Download</h6></a>  
-                            </div>
-                            :(item.split('.').pop())==='zip'|| item.split('.').pop()==='rar'?
-                            <div className=" d-flex gap-2 align-items-center justify-content-center  flex-column" >
-                              <img src={require('../../../Assets/files/rar.jpg')} width='60px' height='40px' alt="docs"></img>
-                              {/* <p className="m-0"style={{fontSize:'12px'}}>{File_Name(item,i)}</p> */}
-                             <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>  
-                               <a  href={`https://free-001.yemenhosting.com/api/download/${File_Path(item,i)}`} >
-                                    <h6  style={{fontSize:'10px'}}>Download</h6></a> 
-                            </div>                     
-                          :(item.split('.').pop())}
-                      </div>
+                  <div key={i} className=" "style={{width:'100px'}}>                     
+                {  typeFile.map((typfile,k)=>
+                  <div key={k}>
+                  {typfile.name.includes(item.split('.').pop())&&(
+                    <div>
+                       <img  src={typfile.type =='img'? ` ${typfile.pathimg}/${item}`:` ${typfile.pathimg}`} 
+                        width='40px' height='40px' alt="img"></img>                   
+                      <p className="m-0">{StringSlice((File_Name(item,i)),10)}</p>   
+                      <a className="fs-6"  href={typfile.type =='img'?`${typfile.pathDownload}/${File_Path(item,i)}`
+                      :`${typfile.pathDownload}/${File_Path(item,i)}`} >Download</a>
+
+                    </div>
+                  )}
+                </div>)}         
+              </div>
+
                   ) }
             </div>}
-
 
               </div>
                     ) }
@@ -434,8 +432,7 @@ const handleOptionChange =async (e) => {
                           onChange={handlechangefile}
                           >
                           </Form.Control>
-                      </Form.Group>  
-                        
+                      </Form.Group>                         
         </Form>
       } 
           <div ref={focus} 
@@ -443,52 +440,30 @@ const handleOptionChange =async (e) => {
             <button style={{ visibility:!isopen && "hidden"}}
               className=" cursor-pointer border-0 bg-white  text-danger ">+Add Files:</button> 
         </div>                 
-      </div> 
-        
-        
-      
+      </div>      
         <div className=" mt-3 bg-white d-flex gap-2 ">
                     {filesdata && filesdata.map((item,i)=>(
-                          <div key={i} className="border rounded  position-relative ">
-        
-                          <div className="d-flex align-items-center justify-content-start mt-3">
-                          {(item.type=='image/jpeg' || item.type=='image/png') ?
-                          <div className="d-flex align-items-center justify-content-start flex-column">
-                              <img  src={URL.createObjectURL(item)} width='30px'  alt="" ></img>
-                              <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                          </div>
-                        :(item.type=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'? 
-                          <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/doc.png')} width='30px' height='30px' alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                              </div>
-                        :(item.type=='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'? 
-                          <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/excel.jpg')} width='30px'height='30px' alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                            </div>
-                        :(item.type=='application/pdf'?
-                          <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/pdf.png')} width='35px' height='35px' alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                            </div>
-                              :(item.type=='application/x-zip-compressed')|| item.type=='application/vnd.rar'&&
-                              <div className="d-flex align-items-center justify-content-start flex-column">
-                                <img src={require('../../../Assets/files/rar.jpg')} width='35px'height='35px' alt=" img product"></img>
-                                <p className="m-0"style={{fontSize:'12px'}}>{StringSlice(item.name,10)}</p>
-                                </div>
-                           )))  }
-                          </div>  
+                          <div key={i} className="border rounded  position-relative ">            
+                  
+
+             <div key={i} className=" "style={{width:'100px'}}>                     
+                {  typeFile.map((typfile,ki)=>
+                  <div key={ki}>
+                  {typfile.src_type==item.type&&(
+                    <div className="d-flex align-items-center justify-content-start flex-column">
+                    <img  src={typfile.type =='img'? `${URL.createObjectURL(item)}`:` ${typfile.pathimg}`} width='30px'  alt="" ></img>
+                    <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
+                </div>
+                  )}
+                </div>)}         
+              </div>
                           <div style={{cursor:"pointer"}}
                           className="position-absolute  top-0 end-0 bg-danger rounded text-white">
                               <p className="py-1 px-2 m-0" onClick={()=>HandleCansleFiles(item)}>
                                   x
                               </p>
-                          </div>  
-    
-                        
-                        </div>
-                      
+                          </div>                         
+                        </div>                      
                     ))
                     }
                 </div> 
@@ -500,16 +475,11 @@ const handleOptionChange =async (e) => {
                   <button className="border-0 bg-white fs-4 "
                    disabled ={title ? false:true }
                    style={{color:title ? '#E41B17':'	#FBBBB9' }}
-                  onClick={()=>{setIsopen(false);setTitle('')}}>Cancle</button>                     
-                </div> 
-        
-                        
-    </div>
-      
+                  onClick={()=>{setIsopen(false);setTitle('')}}>Cancle</button>   
+                </div>                        
+    </div>      
   </div>
-      </>
-
-    )
+      </>   )
 }
 
 
