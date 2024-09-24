@@ -5,6 +5,7 @@ import {  USER, USERS } from "../../../Api/Api"
 import TranFormDate from "../../../Helpers/TranFormDate";
 import { Link, useNavigate } from "react-router-dom";  
 import LoadingSubmit from "../../../Component/Loading/Loading";
+import { typeFile } from "./Files";
 
 export default function AddTaskes(){
     const navigate=useNavigate();   
@@ -251,36 +252,17 @@ function handlechangefile(e){
         </div>           
                 <div className=" border mt-3 bg-white d-flex gap-2 ">
                     {filesdata && filesdata.map((item,i)=>(
-                         <div key={i} className="  position-relative ">
+                         <div key={i} className="  position-relative mt-2 ">
         
-                         <div className="d-flex align-items-center justify-content-start pt-3 ">
-                         {(item.type=='image/jpeg' || item.type=='image/png') ?
-                          <div className="d-flex align-items-center justify-content-start flex-column">
-                             <img  src={URL.createObjectURL(item)} width='35px'  alt="" ></img>
-                             <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                         </div>
-                        :(item.type=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'? 
-                            <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/doc.png')} width='35px'  alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                             </div>
-                        :(item.type=='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'? 
-                            <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/excel.jpg')} width='35px' height='35px' alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                            </div>
-                        :(item.type=='application/pdf'?
-                            <div className="d-flex align-items-center justify-content-start flex-column">
-                            <img src={require('../../../Assets/files/pdf.png')} width='35px' height='35px'alt=" img product"></img>
-                            <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                            </div>
-                             :(item.type=='application/x-zip-compressed'&&
-                                <div className="d-flex align-items-center justify-content-start flex-column">
-                                <img src={require('../../../Assets/files/rar.jpg')} width='35px' height='35px' alt=" img product"></img>
-                                <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
-                                </div>
-                            ) )))  }
-                         </div>  
+                          {  typeFile.map((typfile,ki)=>
+                  <div key={ki}>
+                  {typfile.src_type==item.type&&(
+                    <div className="d-flex align-items-center justify-content-start flex-column">
+                       <img  src={typfile.type =='img'? `${URL.createObjectURL(item)}`:` ${typfile.pathimg}`} width='30px'  alt="" ></img>
+                       <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
+                   </div>
+                  )}
+                </div>)} 
                          <div style={{cursor:"pointer"}}
                          className="position-absolute  top-0 end-0 bg-danger rounded text-white">
                              <p className="py-1 px-2 m-0" onClick={()=>HandleCansleFiles(item)}>
