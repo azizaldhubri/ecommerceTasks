@@ -333,7 +333,7 @@ const handleOptionChange =async (e) => {
                   <div key={key}>
                   {typfile.name.includes(file.split('.').pop())&&(
                     <div>
-                       <img  src={typfile.type =='img'? ` ${typfile.pathimg}/${file}`:` ${typfile.pathimg}`} 
+                       <img  src={typfile.type =='img'? ` ${typfile.pathimg}/${File_Path(file,index)}`:` ${typfile.pathimg}`} 
                         width='40px' height='40px' alt="img"></img>                   
                       <p className="m-0">{StringSlice((File_Name(file,index)),10)}</p>   
                       <a className="fs-6"  href={typfile.type =='img'?`${typfile.pathDownload}/${File_Path(file,index)}`
