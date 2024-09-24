@@ -5,8 +5,8 @@ export const typeFile=[
         name:'jpg',
         type:'img',
         src_type:'image/jpeg',
-        pathimg:'http://127.0.0.1:8000/storage',
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathimg:'https://free-001.yemenhosting.com/backend/storage/app/public/assets',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
         
@@ -17,7 +17,7 @@ export const typeFile=[
         type:'file',
         src_type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         pathimg:require('../../../Assets/files/doc.png'),
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
        
@@ -28,7 +28,7 @@ export const typeFile=[
         type:'file',
         src_type:'application/pdf',
         pathimg:require('../../../Assets/files/pdf.png'),
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',        
         
@@ -38,7 +38,7 @@ export const typeFile=[
         type:'file',
         src_type:'application/x-zip-compressed',
         pathimg:require('../../../Assets/files/rar.jpg'),
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',        
         
@@ -48,7 +48,7 @@ export const typeFile=[
         type:'file',
         src_type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         pathimg:require('../../../Assets/files/excel.jpg'),
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
         
@@ -58,8 +58,8 @@ export const typeFile=[
         name:'jfif',
         type:'img',
         src_type:'application/pdf',
-        pathimg:'http://127.0.0.1:8000/storage',
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathimg:'https://free-001.yemenhosting.com/backend/storage/app/public/assets',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
         
@@ -69,8 +69,9 @@ export const typeFile=[
         name:'JPG',
         type:'img',
         src_type:'image/jpg',
-        pathimg:'http://127.0.0.1:8000/storage',
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        // pathimg:'http://127.0.0.1:8000/storage',
+        pathimg:'https://free-001.yemenhosting.com/backend/storage/app/public/assets',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
  
@@ -80,8 +81,8 @@ export const typeFile=[
         name:'png',
         type:'img',
         src_type:'image/png',
-        pathimg:'http://127.0.0.1:8000/storage',
-        pathDownload:'http://127.0.0.1:8000/api/download',
+        pathimg:'https://free-001.yemenhosting.com/backend/storage/app/public/assets',
+        pathDownload:'https://free-001.yemenhosting.com/api/download',
         width:'40px' ,
         height:'40px',
         
