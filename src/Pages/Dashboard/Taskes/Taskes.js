@@ -1,5 +1,4 @@
- 
-    import { useEffect,  useState } from "react"
+     import { useEffect,  useState } from "react"
     import { Axios } from "../../../Api/axios"
     import { Link } from "react-router-dom"
     import { USER } from "../../../Api/Api"
@@ -11,8 +10,7 @@
     
     export default function Taskes(){   
 
-  const [selectedOption, setSelectedOption] = useState('');  
-    // const[refresh,setrefresh]=useState(0)   
+  const [selectedOption, setSelectedOption] = useState('');    
     const[userId,setUserId]=useState('');     
     const[tasks,setTasks]=useState([]);           
     const[incomingTasks,setIncomingTasks]=useState(false)       
@@ -39,41 +37,36 @@
                 }
                 catch(err){console.log(err)}
             }
-            gettask();
-    
+            gettask();    
             },[])
     
-            tasks.sort((a, b) => {
-                return  new Date(b.created_at)-new Date(a.created_at)  });    
+            tasks.sort((a, b) => {return  new Date(b.created_at)-new Date(a.created_at)  });    
           
           const tasksComplet = tasks.filter(item => item.task_status===selectedOption);
 
           const taskshow2=selectedOption=='' ? tasks:tasksComplet;
         
-          const taskshow=taskshow2.map((task,index)=>(
+        const taskshow=taskshow2.map((task,index)=>(
             <div className="   w-100   " key={index}
-               style={{color:task.task_status=='Completed' ?'black':'red',boxShadow:'0 5px 5px rgba(0,0,0,0.3)'}}>           
-        <>
-              {countCommit===0}
-             {iswrritten=true}
-            {(userId==(incomingTasks?task.id_receiver:task.sender_id)) && 
-               <div key={index} >
-                 { datashow(task,index)}
-               </div>       
-            }
-            {incomingTasks &&   
-               task.chiledtask.map((item ,nm)=>(        
-              (item.task_id==task.id && item.id_receiver==userId && task.sender_id !=userId && iswrritten)&&
-               <div key={nm}>
-                 { datashow(task,nm)}
-               </div>         ))        
-            } 
-         
-    </>
-            </div>
-        
-        )
-    ) 
+                style={{color:task.task_status=='Completed' ?'black':'red',boxShadow:'0 5px 5px rgba(0,0,0,0.3)'}}>           
+                <>
+                    {countCommit===0}
+                    {iswrritten=true}
+                    {(userId==(incomingTasks?task.id_receiver:task.sender_id)) && 
+                    <div key={index} >
+                        { datashow(task,index)}
+                    </div>       
+                    }
+                    {incomingTasks &&   
+                    task.chiledtask.map((item ,nm)=>(        
+                    (item.task_id==task.id && item.id_receiver==userId && task.sender_id !=userId && iswrritten)&&
+                    <div key={nm}>
+                        { datashow(task,nm)}
+                    </div>     ))        
+                    }                 
+                </>
+            </div>   )
+        ) 
     
       function datashow(task,nm) {
         return (         
@@ -100,11 +93,9 @@
                 </div> 
                 {iswrritten=false}
                 <h6 className="m-0  ">{TransformTime(task.created_at)}</h6>
-            </Link>
-        
+            </Link>        
         )
-    }
-     
+    }     
             
   return(
      <>               
@@ -128,11 +119,9 @@
                 <button className="btn" disabled={!incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task sending</button>
             <button className="btn"disabled={incomingTasks} onClick={()=>setIncomingTasks(perv=>!perv)}>task incoming</button>
 
-            <Link className="btn " to='/dashboard/addTask'>New task</Link> 
-            
+            <Link className="btn " to='/dashboard/addTask'>New task</Link>             
             </div> 
-             </div>         
-                    
+             </div>                    
             <div className="mt-3 "> 
                 {taskshow}           
             </div>              
