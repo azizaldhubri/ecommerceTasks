@@ -3,19 +3,40 @@ import { Form } from "react-bootstrap"
 import { Axios } from "../../../Api/axios"
 import {  USER, USERS } from "../../../Api/Api"
 import TranFormDate from "../../../Helpers/TranFormDate";
-import { Link, useNavigate } from "react-router-dom";  
+import { Link, useNavigate } from "react-router-dom";
 import LoadingSubmit from "../../../Component/Loading/Loading";
 import { typeFile } from "./Files";
+import { Checkbox, FormControl, ListItemIcon, ListItemText, MenuItem, Select } from "@mui/material";
+ 
+
 
 export default function AddTaskes(){
     const navigate=useNavigate();   
     
-    // const today = new Date().toISOString().split('T')[0];       
-    const today=TranFormDate(new Date());    
+    // const today = new Date().toISOString().split('T')[0]; 
+    const today =TranFormDate( new Date())    
+       
+    // const todayDate=TranFormDate(new Date());    
     const[users,setUsers]=useState([]);
     const[filesdata,setFilesdata]=useState([]);
     const [message, setMessage] = useState("");
     const[Loading,setLoading]=useState(false);
+    
+    const[selectReciever,setSelectReciever]=useState([]);
+    const isAllSelected=users.length>0 && selectReciever.length ===users.length
+    const optionValue=users.map((item)=>item.id)
+
+    function handlevalue(e){
+        const value=e.target.value  ;
+        setSelectReciever(value);         
+        if(value.includes('All')){
+           setSelectReciever(
+               // (selectReciever && selectReciever.length )=== (users && users.length)
+               (  selectReciever.length ===   users.length)
+               ?[]:optionValue);
+        }
+       }      
+       console.log(selectReciever)
 
   // تحديث الرسالة عند الضغط على الزر
   const handleClick = () => {
@@ -36,7 +57,7 @@ export default function AddTaskes(){
         end_task:today
         
      }) 
-   
+     const taskSending=useRef(false);
        // handle focus
     useEffect(()=>{     
      focus.current.focus();
@@ -94,23 +115,24 @@ function handlechangefile(e){
         formData.append('task_status',form.task_status );
         formData.append('task_type', form.task_type);
         formData.append('description',form.description);
-        formData.append('start_task', form.start_task);
+        formData.append('start_task', form.start_task);           
         formData.append('end_task', form.start_task>form.end_task ?form.start_task:form.end_task );    
        
         // إضافة الملفات إلى formData
         for (let i = 0; i < filesdata.length; i++) {
             formData.append('files[]', filesdata[i]);
         }     
-        try{   
-            setLoading(true) ;
-           await Axios.post('tasks/add',formData )             
-           navigate('/dashboard/taskes');        
+        try{  
+              setLoading(true)                      
+           await Axios.post('tasks/add',formData )  ;
+           taskSending.current='true' ;           
+           navigate('/dashboard/taskes');
+                 
           }
           catch (error) {
             console.error('Error sending data:', error);
-              setLoading(false) 
-          }
-           
+            setLoading(false) 
+          }           
     }
 
     const selectUser=users.map((item,index)=>(            
@@ -131,6 +153,7 @@ function handlechangefile(e){
         function handleOpenImage(){
             openImage.current.click()      
           }
+ 
 
     return(
         <div className=" w-100  ">
@@ -139,7 +162,7 @@ function handlechangefile(e){
                 </h5>
             
             <div className=" w-100  d-flex align-items-center justify-content-start mt-2">
-               {Loading  && < LoadingSubmit/>}
+            {Loading  && < LoadingSubmit/>}
                 <Form onSubmit={handlesubmit}
                 className=" d-flex ms-2 w-100 flex-column"
                 encType="multipart/form-data">
@@ -153,7 +176,7 @@ function handlechangefile(e){
                         value="General task"
                         checked={form.task_type === 'General task'}                       
                         onChange={handleChange}
-                        defaultChecked 
+                        // defaultChecked 
                                  
                         />
                         <Form.Check
@@ -231,6 +254,42 @@ function handlechangefile(e){
                                 {selectUser}
                             </Form.Select>                        
                     </Form.Group>
+                    <div className="ms-2 mt-2 border   w-25 h-25">
+                <FormControl sx={{width:'100%'}} >
+                <Select
+                  value={selectReciever} 
+                  multiple
+                  id='multi-select'
+                  className="dropdown"
+                  onChange={handlevalue}
+                  renderValue={(selected)=>{selected.join('')}}
+                   
+                  >  
+                     <MenuItem value='All'>
+                    <ListItemIcon>
+                         <Checkbox checked={isAllSelected}>                     
+                         </Checkbox>
+                       </ListItemIcon>
+                    <ListItemText  primary='Select All'></ListItemText>
+                </MenuItem>
+                {users.map((options)=>
+                  <MenuItem key={options.id} value={options.id}>
+                      <ListItemIcon>
+                         <Checkbox name='select-checkbox' 
+                         checked={selectReciever.includes(options.id)}>                     
+                         </Checkbox>
+                       </ListItemIcon>
+                      <ListItemText primary={options.name}></ListItemText>
+                  </MenuItem>
+                )}         
+
+                </Select>
+                           
+                
+                </FormControl> 
+
+                </div>
+                     
 
                         <Form.Group className="  pt-2 ">
                             <Form.Control 
@@ -241,8 +300,10 @@ function handlechangefile(e){
                             onChange={handlechangefile}
                             >
                             </Form.Control>
-                        </Form.Group>   
+                        </Form.Group> 
+                          
                 </Form>
+                
 
             </div> 
             <div 
@@ -252,9 +313,8 @@ function handlechangefile(e){
         </div>           
                 <div className=" border mt-3 bg-white d-flex gap-2 ">
                     {filesdata && filesdata.map((item,i)=>(
-                         <div key={i} className="  position-relative mt-2 ">
-        
-                          {  typeFile.map((typfile,ki)=>
+              <div key={i} className="  position-relative mt-2">                                                                
+                {  typeFile.map((typfile,ki)=>
                   <div key={ki}>
                   {typfile.src_type==item.type&&(
                     <div className="d-flex align-items-center justify-content-start flex-column">
@@ -262,10 +322,11 @@ function handlechangefile(e){
                        <p className="m-0"style={{fontSize:'12px'}}>{item.name}</p>
                    </div>
                   )}
-                </div>)} 
+                </div>)}         
+              
                          <div style={{cursor:"pointer"}}
                          className="position-absolute  top-0 end-0 bg-danger rounded text-white">
-                             <p className="py-1 px-2 m-0" onClick={()=>HandleCansleFiles(item)}>
+                             <p className="py-1 px-1 m-0" onClick={()=>HandleCansleFiles(item)}>
                                  x
                              </p>
                          </div>         
@@ -278,7 +339,9 @@ function handlechangefile(e){
 
                 <div className="w-100 d-flex justify-content-center gap-3 mt-2 ">               
                   <button ref={focus}  className="border-0 bg-white fs-4 text-danger"                
-                  onClick={(form.receiver_name && form.description) ?handlesubmit:handleClick}                   
+                  onClick={(form.receiver_name && form.description) ?handlesubmit:handleClick}  
+                  disabled={!taskSending } 
+                //   style={{color:!taskSending.current ? '#E41B17':'	#FBBBB9' }}           
                   >Save</button> 
 
                   <Link to='/dashboard/taskes'
@@ -287,8 +350,8 @@ function handlechangefile(e){
                <div className="w-100 d-flex -align-items-center justify-content-center fs-5 text-danger">
                 
                {message && <p>{message}</p>}
-               </div>                              
-    
+               </div>                 
+           
         </div>
     )
 }
